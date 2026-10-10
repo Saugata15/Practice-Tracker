@@ -4,7 +4,8 @@ import MyStore from "../context/MyStore";
 import { nanoid } from "nanoid";
 
 const useReactForm = () => {
-  const { questions, setQuestions } = useContext(MyStore);
+  const { questions, setQuestions, setShowForm, editId, setEditId } =
+    useContext(MyStore);
   const {
     register,
     reset,
@@ -13,16 +14,25 @@ const useReactForm = () => {
   } = useForm();
 
   const formSubmit = (data) => {
-    const newQuestion = {
-      id: nanoid(),
-      title: data.title,
-      difficulty: data.difficulty,
-      category: data.category,
-      status: "Pending",
-    };
-
-    setQuestions((prev) => [...prev, newQuestion]);
+    setQuestions((prev) => {
+      if (editId) {
+        return prev.map((item) =>
+          item.id === editId ? { ...item, ...data } : item,
+        );
+      } else return [...prev, { ...data, id: nanoid() }];
+    });
+    setEditId(null);
     reset();
+    setShowForm(false);
+  };
+
+  const onDeleteQuestion = (id) => {
+    setQuestions((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const onUpdateQuestion = (id) => {
+    setEditId(id);
+    setShowForm(true);
   };
 
   return {
@@ -33,6 +43,8 @@ const useReactForm = () => {
     questions,
     setQuestions,
     formSubmit,
+    onDeleteQuestion,
+    onUpdateQuestion,
   };
 };
 

@@ -11,6 +11,8 @@ const ContextProvider = ({ children }) => {
     difficulty: "All",
     status: "All",
   });
+  const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("questions", JSON.stringify(questions));
@@ -25,6 +27,10 @@ const ContextProvider = ({ children }) => {
         setSearchTerm,
         filters,
         setFilters,
+        showForm,
+        setShowForm,
+        editId,
+        setEditId,
       }}
     >
       {children}

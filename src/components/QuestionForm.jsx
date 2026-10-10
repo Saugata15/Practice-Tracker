@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import useReactForm from "../hooks/useReactForm";
-import { categories, difficulties } from "../utils/utils";
+import { categories, difficulties, statuses } from "../utils/utils";
 import { Plus } from "lucide-react";
+import MyStore from "../context/MyStore";
 
 const QuestionForm = () => {
-  const {
-    register,
-    handleSubmit,
-    errors,
-    formSubmit,
-  } = useReactForm();
+  const { register, handleSubmit, reset, errors, formSubmit } = useReactForm();
+  const { setShowForm, editId, questions } = useContext(MyStore);
+
+  useEffect(() => {
+    if (editId) {
+      const editItem = questions.find((question) => question.id === editId);
+      reset({
+        title: editItem.title,
+        category: editItem.category,
+        difficulty: editItem.difficulty,
+        status: editItem.status,
+      });
+    }
+  }, [editId, questions, reset]);
 
   return (
-    <div className="w-full min-h-screen bg-white flex justify-center items-center">
-      <div className="w-full max-w-2xl border border-gray-300 rounded-lg p-5 md:p-10">
+    <div
+      className="w-full bg-white flex justify-center items-center p-5"
+      onClick={() => {
+        setShowForm(false);
+      }}
+    >
+      <div
+        className="w-full max-w-xl border border-gray-300 rounded-lg p-5 md:p-10 shadow"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="text-xl font-bold text-black sm:text-3xl lg:text-4xl pb-6">
           Add New Question
         </h2>
@@ -100,6 +117,35 @@ const QuestionForm = () => {
             {errors.difficulty && (
               <p className="mt-2 text-sm text-red-600">
                 {errors.difficulty.message}
+              </p>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="difficulty"
+              className="mb-1.5 block text-sm font-medium"
+            >
+              Difficulty
+            </label>
+
+            <select
+              {...register("status", {
+                required: "Please select a difficulty",
+              })}
+              id="status"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 focus:border-blue-500"
+            >
+              {statuses.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
+              ))}
+            </select>
+
+            {errors.status && (
+              <p className="mt-2 text-sm text-red-600">
+                {errors.status.message}
               </p>
             )}
           </div>
