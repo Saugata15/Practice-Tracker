@@ -6,17 +6,20 @@ import MyStore from "../context/MyStore";
 
 const QuestionForm = () => {
   const { register, handleSubmit, reset, errors, formSubmit } = useReactForm();
-  const { setShowForm, editId, questions } = useContext(MyStore);
+  const { setShowForm, editId, setEditId,questions } = useContext(MyStore);
 
   useEffect(() => {
     if (editId) {
       const editItem = questions.find((question) => question.id === editId);
-      reset({
-        title: editItem.title,
-        category: editItem.category,
-        difficulty: editItem.difficulty,
-        status: editItem.status,
-      });
+
+      if(editItem){
+        reset({
+          title: editItem.title,
+          category: editItem.category,
+          difficulty: editItem.difficulty,
+          status: editItem.status,
+        });
+      }
     }
   }, [editId, questions, reset]);
 
@@ -25,6 +28,8 @@ const QuestionForm = () => {
       className="w-full bg-white flex justify-center items-center p-5"
       onClick={() => {
         setShowForm(false);
+        setEditId(null);
+        reset();
       }}
     >
       <div
@@ -32,7 +37,7 @@ const QuestionForm = () => {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-xl font-bold text-black sm:text-3xl lg:text-4xl pb-6">
-          Add New Question
+          {editId ? "Update Question" :"Add New Question"}
         </h2>
         <form
           onSubmit={handleSubmit(formSubmit)}
@@ -123,15 +128,15 @@ const QuestionForm = () => {
 
           <div>
             <label
-              htmlFor="difficulty"
+              htmlFor="status"
               className="mb-1.5 block text-sm font-medium"
             >
-              Difficulty
+              Status
             </label>
 
             <select
               {...register("status", {
-                required: "Please select a difficulty",
+                required: "Please select a status",
               })}
               id="status"
               className="w-full rounded-lg border border-gray-300 px-3 py-2.5 focus:border-blue-500"
@@ -154,8 +159,8 @@ const QuestionForm = () => {
             type="submit"
             className="w-full bg-blue-500 text-white border-none rounded-lg px-3 py-3 mt-2 flex items-center justify-center cursor-pointer"
           >
-            <Plus size={18} />
-            <span>Add Question</span>
+            {editId ? (<span>Update Question</span>) : ( <><Plus size={18} />
+            <span>Add Question</span></>)}
           </button>
         </form>
       </div>

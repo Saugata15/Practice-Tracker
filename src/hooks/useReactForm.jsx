@@ -4,8 +4,13 @@ import MyStore from "../context/MyStore";
 import { nanoid } from "nanoid";
 
 const useReactForm = () => {
-  const { questions, setQuestions, setShowForm, editId, setEditId } =
-    useContext(MyStore);
+  const {
+    questions,
+    setQuestions,
+    setShowForm,
+    editId,
+    setEditId,
+  } = useContext(MyStore);
   const {
     register,
     reset,

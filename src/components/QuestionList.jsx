@@ -1,7 +1,7 @@
 import useReactForm from "../hooks/useReactForm";
 
-const QuestionList = ({ questions }) => {
-  const { onDeleteQuestion, onUpdateQuestion } = useReactForm();
+const QuestionList = ({ filteredQuestions }) => {
+  const { onDeleteQuestion, onUpdateQuestion, questions } = useReactForm();
 
   return (
     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -19,19 +19,23 @@ const QuestionList = ({ questions }) => {
           <div className="rounded-xl border border-gray-300 px-4 py-2 flex items-center justify-center gap-3">
             <p className="text-[14px] text-slate-400">Total Questions</p>
             <p className="text-lg font-bold text-amber-400">
-              {questions.length}
+              {filteredQuestions.length}
             </p>
           </div>
         </div>
       </div>
 
-      {questions.length === 0 ? (
+      {filteredQuestions.length === 0 ? (
         <div className="flex justify-center items-center w-full min-h-40">
-          <p className="text-gray-500">No questions added yet.</p>
+          <p className="text-gray-500">
+            {questions.length === 0
+              ? "No questions added yet."
+              : "No matching questions found."}
+          </p>
         </div>
       ) : (
         <div className="space-y-3">
-          {questions.map((question) => (
+          {filteredQuestions.map((question) => (
             <div
               key={question.id}
               className="flex flex-col gap-3 rounded-lg border border-gray-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
@@ -42,8 +46,7 @@ const QuestionList = ({ questions }) => {
                 </h3>
 
                 <p className="mt-1 text-sm text-gray-500">
-                  {question.category} · {question.difficulty} ·{" "}
-                  {question.status}
+                  {question.category} · {question.difficulty} · {question.status}
                 </p>
               </div>
 

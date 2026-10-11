@@ -1,9 +1,41 @@
+import { useContext } from "react";
 import QuestionList from "./QuestionList";
+import SearchFilter from "./SearchFilter";
+import MyStore from "../context/MyStore";
 
-const Dashboard = ({ setShowForm, questions }) => {
+const Dashboard = () => {
+  const {
+    searchTerm,
+    setSearchTerm,
+    filters,
+    questions,
+    setShowForm,
+    setFilters,
+  } = useContext(MyStore);
+
+  const filteredQuestions = questions.filter((question) => {
+    const matchesSearch = question.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+
+    const matchesCategory =
+      filters.category === "All" || question.category === filters.category;
+
+    const matchesDifficulty =
+      filters.difficulty === "All" ||
+      question.difficulty === filters.difficulty;
+
+    const matchesStatus =
+      filters.status === "All" || question.status === filters.status;
+
+    return (
+      matchesSearch && matchesCategory && matchesDifficulty && matchesStatus
+    );
+  });
+
   return (
-    <div className="pb-10">
-      <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-5">
+    <div className="flex flex-col gap-5">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-3 gap-5">
         <h1 className="text-3xl md:text-4xl max-md:text-center font-bold text-gray-900">
           Interview Practice Questions
         </h1>
@@ -15,7 +47,13 @@ const Dashboard = ({ setShowForm, questions }) => {
           + Add Question
         </button>
       </div>
-      <QuestionList questions={questions} />
+      <SearchFilter
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        filters={filters}
+        setFilters={setFilters}
+      />
+      <QuestionList filteredQuestions={filteredQuestions} />
     </div>
   );
 };
