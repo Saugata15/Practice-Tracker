@@ -2,6 +2,7 @@ import { useContext } from "react";
 import QuestionList from "./QuestionList";
 import SearchFilter from "./SearchFilter";
 import MyStore from "../context/MyStore";
+import Progress from "./Progress";
 
 const Dashboard = () => {
   const {
@@ -54,6 +55,7 @@ const Dashboard = () => {
         setFilters={setFilters}
       />
       <QuestionList filteredQuestions={filteredQuestions} />
+      <Progress totalQuestions={filteredQuestions}/>
     </div>
   );
 };
