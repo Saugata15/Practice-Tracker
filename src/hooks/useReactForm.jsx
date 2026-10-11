@@ -31,15 +31,6 @@ const useReactForm = () => {
     setShowForm(false);
   };
 
-  const onDeleteQuestion = (id) => {
-    setQuestions((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const onUpdateQuestion = (id) => {
-    setEditId(id);
-    setShowForm(true);
-  };
-
   return {
     register,
     reset,
@@ -48,8 +39,6 @@ const useReactForm = () => {
     questions,
     setQuestions,
     formSubmit,
-    onDeleteQuestion,
-    onUpdateQuestion,
   };
 };
 

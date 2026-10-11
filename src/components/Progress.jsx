@@ -5,12 +5,12 @@ const Progress = ({ totalQuestions }) => {
     (question) => question.status === "Completed",
   );
 
-  const progress = Math.ceil(
+  const progress = totalQuestions.length === 0 ? 0 :(Math.round(
     (completedQuestions.length / totalQuestions.length) * 100,
-  );
+  ));
 
   return (
-    <div className="w-full flex justify-between items-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+    <div className="w-full flex max-sm:flex-col gap-5 justify-between items-center rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
       <div>
         <h3>Track your progress</h3>
       </div>
@@ -19,11 +19,11 @@ const Progress = ({ totalQuestions }) => {
         <div className="h-2 w-40 overflow-hidden rounded-full bg-gray-200">
           <div
             style={{width: `${progress}%`}}
-            className={`h-full rounded-full ${progress >= 25 && progress < 50 ? "bg-amber-400" : progress >= 50 && progress < 75 ? "bg-blue-500" : progress >= 75 ? "bg-green-500" : "bg-red-500"}`}
+            className={`h-full rounded-full ${progress < 25 ? "bg-red-500" : progress < 50 ? "bg-amber-500" : progress < 75 ? "bg-blue-500" : "bg-green-500"}`}
           ></div>
         </div>
         <p
-          className={`font-bold ${progress >= 25 && progress < 50 ? "text-amber-400" : progress >= 50 && progress < 75 ? "text-blue-500" : progress >= 75 ? "text-green-500" : "text-red-500"}`}
+          className={`font-bold ${progress < 25 ? "text-red-500" : progress < 50 ? "text-amber-500" : progress < 75 ? "text-blue-500" : "text-green-500"}`}
         >
           {progress}%
         </p>

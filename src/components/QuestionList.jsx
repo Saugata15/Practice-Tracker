@@ -1,7 +1,16 @@
-import useReactForm from "../hooks/useReactForm";
+import { useContext } from "react";
+import MyStore from "../context/MyStore";
 
 const QuestionList = ({ filteredQuestions }) => {
-  const { onDeleteQuestion, onUpdateQuestion, questions } = useReactForm();
+  const { questions, setQuestions, setEditId, setShowForm } = useContext(MyStore);
+  const onDeleteQuestion = (id) => {
+    setQuestions((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const onUpdateQuestion = (id) => {
+    setEditId(id);
+    setShowForm(true);
+  };
 
   return (
     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
